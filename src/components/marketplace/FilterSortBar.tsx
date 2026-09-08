@@ -47,17 +47,6 @@ export const FilterSortBar: React.FC = () => {
           <Text style={styles.filterChipText}>Sort</Text>
         </Pressable>
 
-        {/* 0% No-Cost EMI Toggle Chip */}
-        <Pressable
-          style={[styles.filterChip, filters.onlyNoCostEMI && styles.activeChip]}
-          onPress={() => setNoCostEMIOnly(!filters.onlyNoCostEMI)}
-          accessibilityLabel="Filter by No-cost EMI"
-        >
-          <Text style={[styles.filterChipText, filters.onlyNoCostEMI && styles.activeChipText]}>
-            0% No-Cost EMI
-          </Text>
-        </Pressable>
-
         {/* Category Chips */}
         {categories.map((cat) => {
           const isActive = filters.selectedCategory === cat.id;
