@@ -46,7 +46,12 @@ export class ApiService {
 
         // Category Filter
         if (filters.selectedCategory && filters.selectedCategory !== 'all') {
-          results = results.filter(p => p.category === filters.selectedCategory);
+          if (filters.selectedCategory === 'wishlist') {
+            const ids = filters.wishlistIds || [];
+            results = results.filter(p => ids.includes(p.id));
+          } else {
+            results = results.filter(p => p.category === filters.selectedCategory);
+          }
         }
 
         // No Cost EMI Filter

@@ -71,6 +71,7 @@ export interface FilterSortState {
   minRating?: number;
   onlyNoCostEMI: boolean;
   sortBy: 'popular' | 'price_low_high' | 'price_high_low' | 'rating';
+  wishlistIds?: string[];
 }
 
 export type MainTabType = 'top_brands' | 'nearby_stores' | 'marketplace';

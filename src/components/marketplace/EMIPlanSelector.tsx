@@ -25,7 +25,7 @@ export const EMIPlanSelector: React.FC<EMIPlanSelectorProps> = ({
           <Text style={styles.mfTagText}>Backed by Mutual Funds</Text>
         </View>
       </View>
-      <Text style={styles.subTitle}>Select a tenure that fits your monthly budget</Text>
+      <Text style={styles.subTitle}>0% No-Cost EMI up to 12 months • Standard interest applies for 18m, 24m+</Text>
 
       {/* Grid of EMI Card Options */}
       <View style={styles.plansGrid}>
@@ -58,10 +58,12 @@ export const EMIPlanSelector: React.FC<EMIPlanSelectorProps> = ({
                 {plan.isNoCost ? (
                   <View style={styles.noCostBadge}>
                     <Zap size={10} color="#FFFFFF" style={{ marginRight: 2 }} />
-                    <Text style={styles.noCostText}>0% Interest</Text>
+                    <Text style={styles.noCostText}>0% No-Cost</Text>
                   </View>
                 ) : (
-                  <Text style={styles.stdRateText}>{plan.interestRatePct}% p.a.</Text>
+                  <View style={styles.stdRateBadge}>
+                    <Text style={styles.stdRateText}>+{plan.interestRatePct}% Interest</Text>
+                  </View>
                 )}
               </View>
 
@@ -190,10 +192,16 @@ const styles = StyleSheet.create({
     fontSize: 9,
     fontWeight: '800',
   },
+  stdRateBadge: {
+    backgroundColor: '#FEF3C7',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 8,
+  },
   stdRateText: {
-    fontSize: 10,
-    color: Colors.textMuted,
-    fontWeight: '600',
+    fontSize: 9,
+    color: '#D97706',
+    fontWeight: '800',
   },
   amountRow: {
     flexDirection: 'row',

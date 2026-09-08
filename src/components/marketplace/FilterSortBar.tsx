@@ -11,6 +11,7 @@ export const FilterSortBar: React.FC = () => {
 
   const categories = [
     { id: 'all', label: 'All Items' },
+    { id: 'wishlist', label: '❤️ Wishlist' },
     { id: 'electronics', label: '📱 Electronics' },
     { id: 'jewellery', label: '💎 Jewellery' },
     { id: 'fashion', label: '👕 Fashion' },

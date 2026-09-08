@@ -155,7 +155,11 @@ export const useMarketplaceStore = create<MarketplaceState>((set, get) => ({
   fetchProducts: async () => {
     set({ isLoading: true, error: null });
     try {
-      const data = await ApiService.getProducts(get().filters);
+      const filtersWithWishlist = {
+        ...get().filters,
+        wishlistIds: get().wishlist,
+      };
+      const data = await ApiService.getProducts(filtersWithWishlist);
       set({ products: data, isLoading: false });
     } catch (err: any) {
       set({ error: err.message || 'Failed to fetch products', isLoading: false });

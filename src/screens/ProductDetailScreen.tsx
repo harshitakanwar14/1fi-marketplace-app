@@ -205,26 +205,23 @@ export const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({
             </View>
           )}
 
-          {/* AI Auto Comparison Table */}
-          <AIComparisonTable currentProduct={product} onSelectProduct={onSelectProduct} />
+          {/* 4. Specifications Table */}
+          <ProductSpecTable specs={product.specs} />
 
-          {/* Interactive EMI Plan Selector */}
+          {/* 5. Description */}
+          <View style={styles.descriptionContainer}>
+            <Text style={styles.sectionTitle}>Description</Text>
+            <Text style={styles.descriptionText}>{product.description}</Text>
+          </View>
+
+          {/* 6. Interactive EMI Plan Selector */}
           <EMIPlanSelector
             plans={product.emiPlans}
             selectedPlanId={selectedEMIPlan?.id}
             onSelectPlan={(plan) => setSelectedEMIPlan(plan)}
           />
 
-          {/* Specifications Table */}
-          <ProductSpecTable specs={product.specs} />
-
-          {/* Description */}
-          <View style={styles.descriptionContainer}>
-            <Text style={styles.sectionTitle}>Description</Text>
-            <Text style={styles.descriptionText}>{product.description}</Text>
-          </View>
-
-          {/* Customer Reviews Section */}
+          {/* 7. Customer Reviews Section */}
           {product.reviews.length > 0 && (
             <View style={styles.reviewsContainer}>
               <Text style={styles.sectionTitle}>Verified Reviews</Text>
@@ -241,7 +238,10 @@ export const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({
             </View>
           )}
 
-          {/* You May Also Like Recommendations */}
+          {/* 8. AI Auto Comparison Table */}
+          <AIComparisonTable currentProduct={product} onSelectProduct={onSelectProduct} />
+
+          {/* 9. You May Also Like Recommendations */}
           <RecommendationCarousel
             products={similarProducts}
             onSelectProduct={onSelectProduct}
@@ -265,10 +265,9 @@ export const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({
           style={styles.proceedBtn}
           onPress={() => setConfirmationModalOpen(true)}
           accessibilityRole="button"
-          accessibilityLabel="Proceed with selected EMI plan"
+          accessibilityLabel="Buy product"
         >
-          <Lock size={14} color="#FFFFFF" style={{ marginRight: 6 }} />
-          <Text style={styles.proceedBtnText}>Proceed with Plan</Text>
+          <Text style={styles.proceedBtnText}>Buy</Text>
         </Pressable>
       </View>
 
