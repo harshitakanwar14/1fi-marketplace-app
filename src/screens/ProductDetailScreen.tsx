@@ -329,11 +329,11 @@ export const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({
               style={styles.modalConfirmBtn}
               onPress={() => {
                 setConfirmationModalOpen(false);
-                alert(`Success! Loan application for ${product.name} submitted successfully.`);
+                alert(`Success! Application for ${product.name} submitted successfully.`);
                 onBack();
               }}
             >
-              <Text style={styles.modalConfirmBtnText}>Submit Loan Application</Text>
+              <Text style={styles.modalConfirmBtnText}>Submit Application</Text>
             </Pressable>
 
             <Pressable
