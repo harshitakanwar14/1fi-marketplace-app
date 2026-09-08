@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { EMIPlan } from '../../types/marketplace';
 import { Colors } from '../../theme/colors';
-import { CheckCircle2, ShieldCheck, Zap } from 'lucide-react-native';
+import { ChevronUp, ChevronDown, Check, ShieldCheck } from 'lucide-react-native';
 
 interface EMIPlanSelectorProps {
   plans: EMIPlan[];
@@ -15,85 +15,102 @@ export const EMIPlanSelector: React.FC<EMIPlanSelectorProps> = ({
   selectedPlanId,
   onSelectPlan,
 }) => {
+  const [isExpanded, setIsExpanded] = useState(true);
+
+  if (!plans || plans.length === 0) return null;
+
+  // Find lowest monthly amount to show in "Starts at ₹X/mo"
+  const lowestMonthly = plans.reduce(
+    (min, p) => (p.monthlyAmount < min ? p.monthlyAmount : min),
+    plans[0].monthlyAmount
+  );
+
   return (
     <View style={styles.container}>
       {/* Title & Trust Note */}
-      <View style={styles.headerRow}>
+      <View style={styles.titleRow}>
         <Text style={styles.title}>Choose EMI Plan</Text>
         <View style={styles.mfTag}>
           <ShieldCheck size={12} color={Colors.primary} style={{ marginRight: 4 }} />
           <Text style={styles.mfTagText}>Backed by Mutual Funds</Text>
         </View>
       </View>
-      <Text style={styles.subTitle}>0% No-Cost EMI up to 12 months • Standard interest applies for 18m, 24m+</Text>
 
-      {/* Grid of EMI Card Options */}
-      <View style={styles.plansGrid}>
-        {plans.map((plan) => {
-          const isSelected = selectedPlanId === plan.id;
+      {/* Main EMI Card Container */}
+      <View style={styles.cardContainer}>
+        {/* Card Header (Starts at ₹X/mo  |  Hide plans ^) */}
+        <Pressable
+          style={styles.cardHeader}
+          onPress={() => setIsExpanded(!isExpanded)}
+          accessibilityRole="button"
+          accessibilityLabel="Toggle EMI plans visibility"
+        >
+          <View style={styles.startsAtRow}>
+            <Text style={styles.startsAtLabel}>Starts at </Text>
+            <Text style={styles.startsAtPrice}>₹{lowestMonthly.toLocaleString('en-IN')}/mo</Text>
+          </View>
 
-          return (
-            <Pressable
-              key={plan.id}
-              style={[
-                styles.planCard,
-                isSelected && styles.selectedPlanCard,
-              ]}
-              onPress={() => onSelectPlan(plan)}
-              accessibilityRole="radio"
-              accessibilityState={{ checked: isSelected }}
-              accessibilityLabel={`${plan.tenureMonths} Months EMI, ₹${plan.monthlyAmount} per month`}
-            >
-              {/* Radio Circle & No-Cost Badge */}
-              <View style={styles.cardHeader}>
-                <View style={styles.tenureContainer}>
-                  <Text style={[styles.tenureNumber, isSelected && styles.selectedText]}>
-                    {plan.tenureMonths}
-                  </Text>
-                  <Text style={[styles.tenureLabel, isSelected && styles.selectedText]}>
-                    Months
-                  </Text>
-                </View>
+          <View style={styles.toggleBtn}>
+            <Text style={styles.toggleBtnText}>
+              {isExpanded ? 'Hide plans' : 'Show plans'}
+            </Text>
+            {isExpanded ? (
+              <ChevronUp size={16} color={Colors.primary} style={{ marginLeft: 2 }} />
+            ) : (
+              <ChevronDown size={16} color={Colors.primary} style={{ marginLeft: 2 }} />
+            )}
+          </View>
+        </Pressable>
 
-                {plan.isNoCost ? (
-                  <View style={styles.noCostBadge}>
-                    <Zap size={10} color="#FFFFFF" style={{ marginRight: 2 }} />
-                    <Text style={styles.noCostText}>0% No-Cost</Text>
+        {/* Collapsible Vertical EMI List */}
+        {isExpanded && (
+          <View style={styles.plansList}>
+            {plans.map((plan, index) => {
+              const isSelected = selectedPlanId === plan.id;
+              const isLast = index === plans.length - 1;
+
+              return (
+                <Pressable
+                  key={plan.id}
+                  style={[
+                    styles.planRow,
+                    isSelected && styles.selectedPlanRow,
+                    !isLast && styles.rowBorder,
+                  ]}
+                  onPress={() => onSelectPlan(plan)}
+                  accessibilityRole="radio"
+                  accessibilityState={{ checked: isSelected }}
+                  accessibilityLabel={`${plan.tenureMonths} months, ₹${plan.monthlyAmount} per month`}
+                >
+                  {/* Left Column: Tenure & Interest Rate */}
+                  <View style={styles.planRowLeft}>
+                    <Text style={[styles.tenureText, isSelected && styles.selectedTenureText]}>
+                      {plan.tenureMonths} months
+                    </Text>
+                    <Text style={styles.dotSeparator}> · </Text>
+                    <Text style={[styles.rateText, plan.isNoCost && styles.noCostRateText]}>
+                      {plan.isNoCost ? '0% p.a.' : `${plan.interestRatePct}% p.a.`}
+                    </Text>
                   </View>
-                ) : (
-                  <View style={styles.stdRateBadge}>
-                    <Text style={styles.stdRateText}>+{plan.interestRatePct}% Interest</Text>
+
+                  {/* Right Column: Monthly Price */}
+                  <View style={styles.planRowRight}>
+                    <Text style={[styles.monthlyPriceText, isSelected && styles.selectedPriceText]}>
+                      ₹{plan.monthlyAmount.toLocaleString('en-IN')}
+                    </Text>
+                    <Text style={styles.moUnitText}> /mo</Text>
+
+                    {isSelected && (
+                      <View style={styles.selectedCheckCircle}>
+                        <Check size={11} color="#FFFFFF" strokeWidth={3} />
+                      </View>
+                    )}
                   </View>
-                )}
-              </View>
-
-              {/* Monthly Amount */}
-              <View style={styles.amountRow}>
-                <Text style={styles.monthlyAmount}>
-                  ₹{plan.monthlyAmount.toLocaleString('en-IN')}
-                </Text>
-                <Text style={styles.perMonthText}>/month</Text>
-              </View>
-
-              {/* Total Cost & Savings */}
-              <View style={styles.cardFooter}>
-                <Text style={styles.totalPayable}>
-                  Total: ₹{plan.totalPayable.toLocaleString('en-IN')}
-                </Text>
-                {plan.savingsAmount && plan.savingsAmount > 0 ? (
-                  <Text style={styles.savingsText}>Save ₹{plan.savingsAmount.toLocaleString('en-IN')}</Text>
-                ) : null}
-              </View>
-
-              {/* Selected Checkmark */}
-              {isSelected && (
-                <View style={styles.selectedCheckPosition}>
-                  <CheckCircle2 size={16} color={Colors.primary} fill="#FFFFFF" />
-                </View>
-              )}
-            </Pressable>
-          );
-        })}
+                </Pressable>
+              );
+            })}
+          </View>
+        )}
       </View>
     </View>
   );
@@ -103,11 +120,11 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 16,
   },
-  headerRow: {
+  titleRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 2,
+    marginBottom: 10,
   },
   title: {
     fontSize: 16,
@@ -127,117 +144,120 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: Colors.primary,
   },
-  subTitle: {
-    fontSize: 12,
-    color: Colors.textMuted,
-    marginBottom: 12,
-  },
-  plansGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 10,
-  },
-  planCard: {
-    width: '48%',
+  cardContainer: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 14,
-    borderWidth: 1.5,
+    borderRadius: 16,
+    borderWidth: 1,
     borderColor: '#E2E8F0',
-    padding: 12,
-    position: 'relative',
-  },
-  selectedPlanCard: {
-    borderColor: Colors.primary,
-    backgroundColor: Colors.primarySurface,
-    shadowColor: Colors.primary,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.12,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 2,
   },
   cardHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    justifyContent: 'space-between',
+    backgroundColor: '#F8FAFC',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F1F5F9',
   },
-  tenureContainer: {
+  startsAtRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
   },
-  tenureNumber: {
-    fontSize: 18,
+  startsAtLabel: {
+    fontSize: 13,
+    color: '#64748B',
+    fontWeight: '500',
+  },
+  startsAtPrice: {
+    fontSize: 15,
     fontWeight: '800',
-    color: Colors.textPrimary,
-    marginRight: 3,
+    color: '#0F172A',
   },
-  tenureLabel: {
-    fontSize: 11,
+  toggleBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  toggleBtnText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: Colors.primary,
+  },
+  plansList: {
+    backgroundColor: '#FFFFFF',
+  },
+  planRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+  },
+  rowBorder: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#F1F5F9',
+  },
+  selectedPlanRow: {
+    backgroundColor: '#F5F3FF',
+  },
+  planRowLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  tenureText: {
+    fontSize: 13,
     fontWeight: '600',
-    color: Colors.textSecondary,
+    color: '#334155',
   },
-  selectedText: {
+  selectedTenureText: {
+    fontWeight: '800',
     color: Colors.primaryDark,
   },
-  noCostBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Colors.success,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 8,
+  dotSeparator: {
+    fontSize: 13,
+    color: '#94A3B8',
   },
-  noCostText: {
-    color: '#FFFFFF',
-    fontSize: 9,
-    fontWeight: '800',
+  rateText: {
+    fontSize: 12,
+    color: '#64748B',
+    fontWeight: '500',
   },
-  stdRateBadge: {
-    backgroundColor: '#FEF3C7',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 8,
+  noCostRateText: {
+    color: '#64748B',
+    fontWeight: '600',
   },
-  stdRateText: {
-    fontSize: 9,
-    color: '#D97706',
-    fontWeight: '800',
-  },
-  amountRow: {
+  planRowRight: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    marginBottom: 6,
   },
-  monthlyAmount: {
-    fontSize: 16,
+  monthlyPriceText: {
+    fontSize: 14,
     fontWeight: '800',
-    color: Colors.textPrimary,
+    color: '#0F172A',
   },
-  perMonthText: {
-    fontSize: 10,
-    color: Colors.textMuted,
-    marginLeft: 2,
+  selectedPriceText: {
+    color: Colors.primary,
+    fontWeight: '900',
   },
-  cardFooter: {
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(226, 232, 240, 0.6)',
-    paddingTop: 6,
+  moUnitText: {
+    fontSize: 11,
+    color: '#64748B',
+    fontWeight: '500',
+    marginRight: 6,
   },
-  totalPayable: {
-    fontSize: 10,
-    color: Colors.textSecondary,
-  },
-  savingsText: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: Colors.success,
-    marginTop: 2,
-  },
-  selectedCheckPosition: {
-    position: 'absolute',
-    top: -6,
-    right: -6,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 10,
+  selectedCheckCircle: {
+    backgroundColor: Colors.primary,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 4,
   },
 });

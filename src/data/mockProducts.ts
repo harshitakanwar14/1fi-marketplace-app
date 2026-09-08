@@ -1,4 +1,34 @@
 import { Product } from '../types/marketplace';
+const buildEmiPlans = (id: string, price: number) => {
+  const options = [
+    { months: 3, rate: 0 },
+    { months: 6, rate: 0 },
+    { months: 9, rate: 0 },
+    { months: 12, rate: 0 },
+    { months: 18, rate: 0 },
+    { months: 24, rate: 0 },
+    { months: 36, rate: 7.49 },
+    { months: 48, rate: 7.99 },
+    { months: 60, rate: 8.49 },
+  ];
+
+  return options.map(({ months, rate }) => {
+    const interest = rate > 0 ? (price * (rate / 100) * (months / 12)) : 0;
+    const totalPayable = Math.round(price + interest);
+    const monthlyAmount = Math.round(totalPayable / months);
+
+    return {
+      id: `${id}-${months}`,
+      tenureMonths: months,
+      monthlyAmount,
+      isNoCost: rate === 0,
+      interestRatePct: rate,
+      processingFee: rate > 0 ? 499 : 0,
+      totalPayable,
+    };
+  });
+};
+
 
 export const MOCK_PRODUCTS: Product[] = [
   // ─── ELECTRONICS (#1 - #8, #22 - #25, #34) ──────────────────────────────────
@@ -29,12 +59,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Camera': '48MP Main + 12MP Ultra Wide',
       'Battery': 'Up to 20 hrs video',
     },
-    emiPlans: [
-      { id: 'emi-01-3', tenureMonths: 3, monthlyAmount: 24967, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 74900 },
-      { id: 'emi-01-6', tenureMonths: 6, monthlyAmount: 12484, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 74900 },
-      { id: 'emi-01-12', tenureMonths: 12, monthlyAmount: 6242, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 74900 },
-      { id: 'emi-01-24', tenureMonths: 24, monthlyAmount: 3121, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 74900 },
-    ],
+    emiPlans: buildEmiPlans('prod-01', 74900),
     reviews: [
       { id: 'r01-1', userName: 'Aarav Sharma', rating: 5, date: '10 Aug 2026', comment: 'Upgraded from iPhone 12. Dynamic Island and battery life are amazing.', verifiedPurchase: true },
     ],
@@ -67,11 +92,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Storage': '256GB SSD',
       'Battery': 'Up to 18 hrs',
     },
-    emiPlans: [
-      { id: 'emi-02-6', tenureMonths: 6, monthlyAmount: 18817, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 112900 },
-      { id: 'emi-02-12', tenureMonths: 12, monthlyAmount: 9408, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 112900 },
-      { id: 'emi-02-24', tenureMonths: 24, monthlyAmount: 4704, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 112900 },
-    ],
+    emiPlans: buildEmiPlans('prod-02', 112900),
     reviews: [
       { id: 'r02-1', userName: 'Priya Patel', rating: 5, date: '15 Aug 2026', comment: 'Super lightweight and battery lasts two days of work easily.', verifiedPurchase: true },
     ],
@@ -102,10 +123,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Battery': '6 hrs + 24 hrs case',
       'Chip': 'H2',
     },
-    emiPlans: [
-      { id: 'emi-03-3', tenureMonths: 3, monthlyAmount: 7663, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 22990 },
-      { id: 'emi-03-6', tenureMonths: 6, monthlyAmount: 3832, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 22990 },
-    ],
+    emiPlans: buildEmiPlans('prod-03', 22990),
     reviews: [
       { id: 'r03-1', userName: 'Rohan Mehra', rating: 5, date: '01 Jul 2026', comment: 'Noise cancellation is top tier for office work.', verifiedPurchase: true },
     ],
@@ -137,11 +155,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Storage': '256GB',
       'Camera': '50MP Triple Camera',
     },
-    emiPlans: [
-      { id: 'emi-04-6', tenureMonths: 6, monthlyAmount: 11666, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 69999 },
-      { id: 'emi-04-12', tenureMonths: 12, monthlyAmount: 5833, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 69999 },
-      { id: 'emi-04-24', tenureMonths: 24, monthlyAmount: 2916, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 69999 },
-    ],
+    emiPlans: buildEmiPlans('prod-04', 69999),
     reviews: [
       { id: 'r04-1', userName: 'Kunal Kapoor', rating: 4, date: '12 Sep 2026', comment: 'AI features like Live Translate are super useful during travel.', verifiedPurchase: true },
     ],
@@ -172,10 +186,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Sensors': 'BIA, ECG, SpO2',
       'Water Resistance': '5ATM + IP68',
     },
-    emiPlans: [
-      { id: 'emi-05-3', tenureMonths: 3, monthlyAmount: 9333, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 27999 },
-      { id: 'emi-05-6', tenureMonths: 6, monthlyAmount: 4666, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 27999 },
-    ],
+    emiPlans: buildEmiPlans('prod-05', 27999),
     reviews: [
       { id: 'r05-1', userName: 'Ananya S.', rating: 4, date: '04 Aug 2026', comment: 'Sleep tracking reports are very detailed.', verifiedPurchase: true },
     ],
@@ -206,10 +217,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Battery': '30 hrs',
       'Codec': 'LDAC, AAC, SBC',
     },
-    emiPlans: [
-      { id: 'emi-06-3', tenureMonths: 3, monthlyAmount: 9997, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 29990 },
-      { id: 'emi-06-6', tenureMonths: 6, monthlyAmount: 4998, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 29990 },
-    ],
+    emiPlans: buildEmiPlans('prod-06', 29990),
     reviews: [
       { id: 'r06-1', userName: 'Vikram Singh', rating: 5, date: '20 Jul 2026', comment: 'Best noise cancellation for flights and coffee shops.', verifiedPurchase: true },
     ],
@@ -241,11 +249,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Storage': '256GB',
       'Charging': '100W SUPERVOOC',
     },
-    emiPlans: [
-      { id: 'emi-07-6', tenureMonths: 6, monthlyAmount: 9999, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 59999 },
-      { id: 'emi-07-12', tenureMonths: 12, monthlyAmount: 5000, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 59999 },
-      { id: 'emi-07-24', tenureMonths: 24, monthlyAmount: 2500, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 59999 },
-    ],
+    emiPlans: buildEmiPlans('prod-07', 59999),
     reviews: [
       { id: 'r07-1', userName: 'Sameer K.', rating: 5, date: '18 Aug 2026', comment: 'Full charge in under 30 minutes!', verifiedPurchase: true },
     ],
@@ -276,11 +280,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'RAM': '16GB',
       'Storage': '512GB SSD',
     },
-    emiPlans: [
-      { id: 'emi-08-6', tenureMonths: 6, monthlyAmount: 19998, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 119990 },
-      { id: 'emi-08-12', tenureMonths: 12, monthlyAmount: 9999, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 119990 },
-      { id: 'emi-08-24', tenureMonths: 24, monthlyAmount: 5000, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 119990 },
-    ],
+    emiPlans: buildEmiPlans('prod-08', 119990),
     reviews: [
       { id: 'r08-1', userName: 'Tarun G.', rating: 5, date: '29 Jul 2026', comment: 'Sleek design, brilliant screen and solid build quality.', verifiedPurchase: true },
     ],
@@ -312,11 +312,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Storage': '256GB',
       'Camera': '200MP Main Camera',
     },
-    emiPlans: [
-      { id: 'emi-22-3', tenureMonths: 3, monthlyAmount: 8333, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 24999 },
-      { id: 'emi-22-6', tenureMonths: 6, monthlyAmount: 4166, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 24999 },
-      { id: 'emi-22-12', tenureMonths: 12, monthlyAmount: 2083, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 24999 },
-    ],
+    emiPlans: buildEmiPlans('prod-22', 24999),
     reviews: [
       { id: 'r22-1', userName: 'Mohit R.', rating: 4, date: '14 Aug 2026', comment: '200MP photos have crazy detail. Great value.', verifiedPurchase: true },
     ],
@@ -346,10 +342,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Waterproof': '10m without housing',
       'Stabilization': 'HyperSmooth 6.0',
     },
-    emiPlans: [
-      { id: 'emi-23-6', tenureMonths: 6, monthlyAmount: 6583, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 39500 },
-      { id: 'emi-23-12', tenureMonths: 12, monthlyAmount: 3292, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 39500 },
-    ],
+    emiPlans: buildEmiPlans('prod-23', 39500),
     reviews: [
       { id: 'r23-1', userName: 'Aditya P.', rating: 5, date: '02 Sep 2026', comment: 'HyperSmooth 6.0 makes bike riding footage look like a gimbal!', verifiedPurchase: true },
     ],
@@ -379,11 +372,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Video': '4K30',
       'Autofocus': 'Dual Pixel CMOS AF II',
     },
-    emiPlans: [
-      { id: 'emi-24-6', tenureMonths: 6, monthlyAmount: 10833, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 64999 },
-      { id: 'emi-24-12', tenureMonths: 12, monthlyAmount: 5417, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 64999 },
-      { id: 'emi-24-24', tenureMonths: 24, monthlyAmount: 2709, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 64999 },
-    ],
+    emiPlans: buildEmiPlans('prod-24', 64999),
     reviews: [
       { id: 'r24-1', userName: 'Harshita K.', rating: 5, date: '10 Aug 2026', comment: 'Great entry level camera for content creators.', verifiedPurchase: true },
     ],
@@ -413,9 +402,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Battery': 'Up to 14 days',
       'GPS': 'Dual-band',
     },
-    emiPlans: [
-      { id: 'emi-25-3', tenureMonths: 3, monthlyAmount: 4333, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 12999 },
-    ],
+    emiPlans: buildEmiPlans('prod-25', 12999),
     reviews: [
       { id: 'r25-1', userName: 'Devendra S.', rating: 4, date: '19 Aug 2026', comment: 'GPS tracking is fast and battery lasts 10+ days easily.', verifiedPurchase: true },
     ],
@@ -446,11 +433,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'HDR': 'Dolby Vision, HDR10',
       'Smart Platform': 'webOS 23',
     },
-    emiPlans: [
-      { id: 'emi-34-6', tenureMonths: 6, monthlyAmount: 19998, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 119990 },
-      { id: 'emi-34-12', tenureMonths: 12, monthlyAmount: 9999, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 119990 },
-      { id: 'emi-34-24', tenureMonths: 24, monthlyAmount: 5000, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 119990 },
-    ],
+    emiPlans: buildEmiPlans('prod-34', 119990),
     reviews: [
       { id: 'r34-1', userName: 'Vikrant N.', rating: 5, date: '10 Sep 2026', comment: 'OLED blacks are stunning. Best TV I have ever owned.', verifiedPurchase: true },
     ],
@@ -483,10 +466,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Purity': 'Hallmarked',
       'Style': 'Solitaire',
     },
-    emiPlans: [
-      { id: 'emi-09-3', tenureMonths: 3, monthlyAmount: 5733, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 17200 },
-      { id: 'emi-09-6', tenureMonths: 6, monthlyAmount: 2867, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 17200 },
-    ],
+    emiPlans: buildEmiPlans('prod-09', 17200),
     reviews: [
       { id: 'r09-1', userName: 'Sunita D.', rating: 5, date: '15 Aug 2026', comment: 'Dainty and shines beautifully. Comes with hallmark cert.', verifiedPurchase: true },
     ],
@@ -517,10 +497,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Closure': 'Screw-back',
       'Style': 'Hoops',
     },
-    emiPlans: [
-      { id: 'emi-10-3', tenureMonths: 3, monthlyAmount: 7663, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 22990 },
-      { id: 'emi-10-6', tenureMonths: 6, monthlyAmount: 3832, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 22990 },
-    ],
+    emiPlans: buildEmiPlans('prod-10', 22990),
     reviews: [
       { id: 'r10-1', userName: 'Megha P.', rating: 4, date: '01 Sep 2026', comment: 'Very sturdy screw back and lightweight.', verifiedPurchase: true },
     ],
@@ -551,10 +528,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Occasion': 'Bridal',
       'Set Includes': 'Necklace + Earrings',
     },
-    emiPlans: [
-      { id: 'emi-11-12', tenureMonths: 12, monthlyAmount: 14875, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 178500 },
-      { id: 'emi-11-24', tenureMonths: 24, monthlyAmount: 7437, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 178500 },
-    ],
+    emiPlans: buildEmiPlans('prod-11', 178500),
     reviews: [
       { id: 'r11-1', userName: 'Rajeshwari K.', rating: 5, date: '11 Aug 2026', comment: 'Absolute masterpiece from Tanishq for my daughter’s wedding.', verifiedPurchase: true },
     ],
@@ -585,11 +559,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Certification': 'IGI Certified',
       'Style': 'Solitaire',
     },
-    emiPlans: [
-      { id: 'emi-28-6', tenureMonths: 6, monthlyAmount: 14750, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 88500 },
-      { id: 'emi-28-12', tenureMonths: 12, monthlyAmount: 7375, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 88500 },
-      { id: 'emi-28-24', tenureMonths: 24, monthlyAmount: 3688, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 88500 },
-    ],
+    emiPlans: buildEmiPlans('prod-28', 88500),
     reviews: [
       { id: 'r28-1', userName: 'Deepika S.', rating: 5, date: '10 Aug 2026', comment: 'Sparkles beautifully! IGI certificate verified.', verifiedPurchase: true },
     ],
@@ -620,11 +590,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Style': 'Rope Chain',
       'Hallmark': 'BIS Hallmarked',
     },
-    emiPlans: [
-      { id: 'emi-29-6', tenureMonths: 6, monthlyAmount: 21000, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 126000 },
-      { id: 'emi-29-12', tenureMonths: 12, monthlyAmount: 10500, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 126000 },
-      { id: 'emi-29-24', tenureMonths: 24, monthlyAmount: 5250, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 126000 },
-    ],
+    emiPlans: buildEmiPlans('prod-29', 126000),
     reviews: [
       { id: 'r29-1', userName: 'Sunil Rao', rating: 5, date: '25 Jul 2026', comment: 'Authentic 916 gold hallmark, delivered securely.', verifiedPurchase: true },
     ],
@@ -657,9 +623,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Type': 'Lifestyle Sneaker',
       'Sizes': 'UK 6-11',
     },
-    emiPlans: [
-      { id: 'emi-12-3', tenureMonths: 3, monthlyAmount: 3498, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 10495 },
-    ],
+    emiPlans: buildEmiPlans('prod-12', 10495),
     reviews: [
       { id: 'r12-1', userName: 'Kiran B.', rating: 5, date: '12 Aug 2026', comment: 'Extremely comfortable for walking all day.', verifiedPurchase: true },
     ],
@@ -689,10 +653,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Platform': 'Wear OS',
       'Battery': 'Up to 24 hrs',
     },
-    emiPlans: [
-      { id: 'emi-26-3', tenureMonths: 3, monthlyAmount: 6332, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 18995 },
-      { id: 'emi-26-6', tenureMonths: 6, monthlyAmount: 3166, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 18995 },
-    ],
+    emiPlans: buildEmiPlans('prod-26', 18995),
     reviews: [
       { id: 'r26-1', userName: 'Karthik N.', rating: 4, date: '05 Sep 2026', comment: 'Fast performance and smooth notification responses.', verifiedPurchase: true },
     ],
@@ -725,11 +686,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Type': 'Inverter Split AC',
       'Warranty': '1 Yr Comprehensive, 10 Yr Compressor',
     },
-    emiPlans: [
-      { id: 'emi-13-6', tenureMonths: 6, monthlyAmount: 6998, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 41990 },
-      { id: 'emi-13-12', tenureMonths: 12, monthlyAmount: 3499, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 41990 },
-      { id: 'emi-13-24', tenureMonths: 24, monthlyAmount: 1750, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 41990 },
-    ],
+    emiPlans: buildEmiPlans('prod-13', 41990),
     reviews: [
       { id: 'r13-1', userName: 'Sunil P.', rating: 5, date: '10 Jun 2026', comment: 'Silent operation and cools the living room in 5 mins.', verifiedPurchase: true },
     ],
@@ -760,10 +717,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Wash Programs': '13',
       'Energy Rating': '5 Star',
     },
-    emiPlans: [
-      { id: 'emi-14-6', tenureMonths: 6, monthlyAmount: 4665, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 27990 },
-      { id: 'emi-14-12', tenureMonths: 12, monthlyAmount: 2333, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 27990 },
-    ],
+    emiPlans: buildEmiPlans('prod-14', 27990),
     reviews: [
       { id: 'r14-1', userName: 'Alka M.', rating: 4, date: '28 Jul 2026', comment: 'Cleans clothes thoroughly without damaging fabrics.', verifiedPurchase: true },
     ],
@@ -793,10 +747,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Filtration': 'HEPA',
       'Bin Capacity': '0.76L',
     },
-    emiPlans: [
-      { id: 'emi-15-6', tenureMonths: 6, monthlyAmount: 6650, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 39900 },
-      { id: 'emi-15-12', tenureMonths: 12, monthlyAmount: 3325, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 39900 },
-    ],
+    emiPlans: buildEmiPlans('prod-15', 39900),
     reviews: [
       { id: 'r15-1', userName: 'Preeti G.', rating: 5, date: '19 Jul 2026', comment: 'Sucks up pet hair effortlessly from carpets.', verifiedPurchase: true },
     ],
@@ -828,11 +779,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Seating': '3 Seater',
       'Dimensions': '195 x 86 x 90 cm',
     },
-    emiPlans: [
-      { id: 'emi-16-6', tenureMonths: 6, monthlyAmount: 6000, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 35999 },
-      { id: 'emi-16-12', tenureMonths: 12, monthlyAmount: 3000, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 35999 },
-      { id: 'emi-16-24', tenureMonths: 24, monthlyAmount: 1500, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 35999 },
-    ],
+    emiPlans: buildEmiPlans('prod-16', 35999),
     reviews: [
       { id: 'r16-1', userName: 'Amitabh N.', rating: 5, date: '10 Aug 2026', comment: 'Very sturdy wooden frame and comfortable cushion.', verifiedPurchase: true },
     ],
@@ -862,10 +809,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Size': 'Queen',
       'Storage': 'Under-bed',
     },
-    emiPlans: [
-      { id: 'emi-17-6', tenureMonths: 6, monthlyAmount: 2665, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 15990 },
-      { id: 'emi-17-12', tenureMonths: 12, monthlyAmount: 1333, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 15990 },
-    ],
+    emiPlans: buildEmiPlans('prod-17', 15990),
     reviews: [
       { id: 'r17-1', userName: 'Kriti V.', rating: 4, date: '04 Sep 2026', comment: 'Minimal design, assembly took 2 hours.', verifiedPurchase: true },
     ],
@@ -895,9 +839,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Dimensions': '90 x 45 x 75 cm',
       'Shelves': '2',
     },
-    emiPlans: [
-      { id: 'emi-18-3', tenureMonths: 3, monthlyAmount: 3500, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 10499 },
-    ],
+    emiPlans: buildEmiPlans('prod-18', 10499),
     reviews: [
       { id: 'r18-1', userName: 'Rahul D.', rating: 4, date: '15 Aug 2026', comment: 'Fits perfectly in small study room corners.', verifiedPurchase: true },
     ],
@@ -927,11 +869,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Seating': '4 Seater',
       'Finish': 'Natural Teak',
     },
-    emiPlans: [
-      { id: 'emi-32-6', tenureMonths: 6, monthlyAmount: 7666, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 45999 },
-      { id: 'emi-32-12', tenureMonths: 12, monthlyAmount: 3833, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 45999 },
-      { id: 'emi-32-24', tenureMonths: 24, monthlyAmount: 1917, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 45999 },
-    ],
+    emiPlans: buildEmiPlans('prod-32', 45999),
     reviews: [
       { id: 'r32-1', userName: 'Mahesh K.', rating: 4, date: '02 Sep 2026', comment: 'Solid wood texture looks premium in the dining hall.', verifiedPurchase: true },
     ],
@@ -961,10 +899,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Thickness': '8 inch',
       'Material': 'Memory Foam + High Resilience',
     },
-    emiPlans: [
-      { id: 'emi-33-3', tenureMonths: 3, monthlyAmount: 7666, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 22999 },
-      { id: 'emi-33-6', tenureMonths: 6, monthlyAmount: 3833, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 22999 },
-    ],
+    emiPlans: buildEmiPlans('prod-33', 22999),
     reviews: [
       { id: 'r33-1', userName: 'Anil M.', rating: 5, date: '18 Aug 2026', comment: 'Great back support for sleeping posture.', verifiedPurchase: true },
     ],
@@ -996,10 +931,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Validity': '12 months',
       'Baggage': '20kg check-in',
     },
-    emiPlans: [
-      { id: 'emi-19-6', tenureMonths: 6, monthlyAmount: 2150, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 12900 },
-      { id: 'emi-19-12', tenureMonths: 12, monthlyAmount: 1075, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 12900 },
-    ],
+    emiPlans: buildEmiPlans('prod-19', 12900),
     reviews: [
       { id: 'r19-1', userName: 'Deepika K.', rating: 5, date: '18 Aug 2026', comment: 'Vistara premium economy experience was top notch.', verifiedPurchase: true },
     ],
@@ -1029,10 +961,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Includes': 'Hotel + Breakfast + Transfers',
       'Destination': 'Goa',
     },
-    emiPlans: [
-      { id: 'emi-20-6', tenureMonths: 6, monthlyAmount: 3666, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 21999 },
-      { id: 'emi-20-12', tenureMonths: 12, monthlyAmount: 1833, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 21999 },
-    ],
+    emiPlans: buildEmiPlans('prod-20', 21999),
     reviews: [
       { id: 'r20-1', userName: 'Siddharth & Meera', rating: 4, date: '05 Sep 2026', comment: 'Resort pool and breakfast spread were awesome.', verifiedPurchase: true },
     ],
@@ -1063,10 +992,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Baggage': '35kg check-in',
       'Lounge Access': 'Included',
     },
-    emiPlans: [
-      { id: 'emi-30-6', tenureMonths: 6, monthlyAmount: 4817, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 28900 },
-      { id: 'emi-30-12', tenureMonths: 12, monthlyAmount: 2408, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 28900 },
-    ],
+    emiPlans: buildEmiPlans('prod-30', 28900),
     reviews: [
       { id: 'r30-1', userName: 'Kavita R.', rating: 5, date: '20 Aug 2026', comment: 'Luxury flight experience at great EMI value.', verifiedPurchase: true },
     ],
@@ -1096,11 +1022,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Includes': 'Flights + Resort + Transfers',
       'Destination': 'Bali, Indonesia',
     },
-    emiPlans: [
-      { id: 'emi-31-6', tenureMonths: 6, monthlyAmount: 10333, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 61999 },
-      { id: 'emi-31-12', tenureMonths: 12, monthlyAmount: 5167, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 61999 },
-      { id: 'emi-31-24', tenureMonths: 24, monthlyAmount: 2583, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 61999 },
-    ],
+    emiPlans: buildEmiPlans('prod-31', 61999),
     reviews: [
       { id: 'r31-1', userName: 'Rahil & Zara', rating: 5, date: '01 Sep 2026', comment: 'Unforgettable Bali trip booked seamlessly with 1Fi EMI.', verifiedPurchase: true },
     ],
@@ -1133,9 +1055,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Battery': 'Up to 10 weeks',
       'Water Resistance': 'IPX8',
     },
-    emiPlans: [
-      { id: 'emi-21-3', tenureMonths: 3, monthlyAmount: 4000, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 11999 },
-    ],
+    emiPlans: buildEmiPlans('prod-21', 11999),
     reviews: [
       { id: 'r21-1', userName: 'Ananya B.', rating: 5, date: '21 Aug 2026', comment: 'Warm light makes reading in bed so easy on the eyes.', verifiedPurchase: true },
     ],
@@ -1167,10 +1087,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Sensors': 'Heart Rate, SpO2, ECG',
       'GPS': 'Built-in',
     },
-    emiPlans: [
-      { id: 'emi-27-3', tenureMonths: 3, monthlyAmount: 4500, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 13499 },
-      { id: 'emi-27-6', tenureMonths: 6, monthlyAmount: 2250, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 13499 },
-    ],
+    emiPlans: buildEmiPlans('prod-27', 13499),
     reviews: [
       { id: 'r27-1', userName: 'Rajiv N.', rating: 4, date: '11 Aug 2026', comment: 'Heart rate tracking during workouts is precise.', verifiedPurchase: true },
     ],
@@ -1202,9 +1119,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Type': 'Acoustic Dreadnought',
       'Strings': '6-String Steel',
     },
-    emiPlans: [
-      { id: 'emi-35-3', tenureMonths: 3, monthlyAmount: 3666, isNoCost: true, interestRatePct: 0, processingFee: 0, totalPayable: 10999 },
-    ],
+    emiPlans: buildEmiPlans('prod-35', 10999),
     reviews: [
       { id: 'r35-1', userName: 'Aman K.', rating: 5, date: '29 Jul 2026', comment: 'Rich warm acoustic tone. Best guitar for beginners and intermediates.', verifiedPurchase: true },
     ],
