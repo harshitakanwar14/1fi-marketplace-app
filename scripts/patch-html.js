@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const indexPath = path.join(__dirname, 'dist', 'index.html');
+const indexPath = path.join(process.cwd(), 'dist', 'index.html');
 let html = fs.readFileSync(indexPath, 'utf8');
 
 // Inject error overlay script before </body>
