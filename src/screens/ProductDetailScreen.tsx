@@ -15,12 +15,12 @@ import { RatingStars } from '../components/common/RatingStars';
 import { EMIPlanSelector } from '../components/marketplace/EMIPlanSelector';
 import { ProductSpecTable } from '../components/marketplace/ProductSpecTable';
 import { RecommendationCarousel } from '../components/marketplace/RecommendationCarousel';
+import { AIComparisonTable } from '../components/marketplace/AIComparisonTable';
 import { useMarketplaceStore } from '../store/marketplaceStore';
 import { ApiService } from '../data/apiService';
 import {
   ArrowLeft,
   Heart,
-  Scale,
   ShieldCheck,
   CheckCircle2,
   Lock,
@@ -43,9 +43,6 @@ export const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({
     toggleWishlist,
     selectedEMIPlan,
     setSelectedEMIPlan,
-    toggleComparisonProduct,
-    comparisonProductIds,
-    setComparisonOpen,
   } = useMarketplaceStore();
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -56,7 +53,6 @@ export const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({
   const [isConfirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
   const isWishlisted = wishlist.includes(product.id);
-  const isComparing = comparisonProductIds.includes(product.id);
 
   useEffect(() => {
     // Set default selected EMI plan
@@ -85,14 +81,6 @@ export const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({
         </Text>
 
         <View style={styles.headerRightActions}>
-          <Pressable
-            style={[styles.iconCircle, isComparing && styles.activeCircle]}
-            onPress={() => toggleComparisonProduct(product.id)}
-            accessibilityLabel="Compare product"
-          >
-            <Scale size={18} color={isComparing ? Colors.primary : Colors.textPrimary} />
-          </Pressable>
-
           <Pressable
             style={[styles.iconCircle, isWishlisted && styles.wishlistCircle]}
             onPress={() => toggleWishlist(product.id)}
@@ -217,22 +205,8 @@ export const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({
             </View>
           )}
 
-          {/* Compare Button Launcher */}
-          <Pressable
-            style={styles.compareBarBtn}
-            onPress={() => {
-              toggleComparisonProduct(product.id);
-              setComparisonOpen(true);
-            }}
-          >
-            <View style={styles.compareLeft}>
-              <Scale size={16} color={Colors.primary} style={{ marginRight: 8 }} />
-              <Text style={styles.compareBarText}>
-                {isComparing ? 'View side-by-side comparison' : 'Compare with similar products'}
-              </Text>
-            </View>
-            <ChevronRight size={16} color={Colors.primary} />
-          </Pressable>
+          {/* AI Auto Comparison Table */}
+          <AIComparisonTable currentProduct={product} onSelectProduct={onSelectProduct} />
 
           {/* Interactive EMI Plan Selector */}
           <EMIPlanSelector

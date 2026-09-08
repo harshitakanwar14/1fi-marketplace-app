@@ -118,15 +118,23 @@ export class ApiService {
           return;
         }
 
-        let similar = MOCK_PRODUCTS.filter(
-          p => p.id !== productId && (p.category === currentProduct.category || currentProduct.similarProductIds.includes(p.id))
+        // Strictly filter to the SAME category only
+        let sameCategoryProducts = MOCK_PRODUCTS.filter(
+          p => p.id !== productId && p.category === currentProduct.category
         );
 
-        if (similar.length === 0) {
-          similar = MOCK_PRODUCTS.filter(p => p.id !== productId).slice(0, 3);
-        }
+        // Sort: prioritize explicitly linked similarProductIds first, then same subcategory
+        sameCategoryProducts.sort((a, b) => {
+          const aExplicit = currentProduct.similarProductIds.includes(a.id) ? 1 : 0;
+          const bExplicit = currentProduct.similarProductIds.includes(b.id) ? 1 : 0;
+          if (aExplicit !== bExplicit) return bExplicit - aExplicit;
 
-        resolve(similar);
+          const aSub = a.subcategory === currentProduct.subcategory ? 1 : 0;
+          const bSub = b.subcategory === currentProduct.subcategory ? 1 : 0;
+          return bSub - aSub;
+        });
+
+        resolve(sameCategoryProducts.slice(0, 6));
       }, SIMULATED_LATENCY / 2);
     });
   }

@@ -33,7 +33,8 @@ export interface Product {
   name: string;
   brand: string;
   brandLogo: string;
-  category: 'electronics' | 'travel' | 'jewellery' | 'wearables' | 'laptops';
+  category: 'electronics' | 'travel' | 'jewellery' | 'wearables' | 'laptops' | 'smartphones' | 'headphones' | 'appliances';
+  subcategory?: string; // e.g., "Samsung S Series", "Apple MacBook", "Over-Ear Headphones"
   price: number;
   originalPrice?: number;
   discountPercentage?: number;
