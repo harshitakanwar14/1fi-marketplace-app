@@ -33,12 +33,11 @@ export type ProductCategory =
   | 'jewellery'
   | 'fashion'
   | 'home_appliances'
-  | 'beauty'
   | 'furniture'
-  | 'sports'
   | 'travel'
   | 'books_stationery'
-  | 'grocery_gourmet';
+  | 'health_fitness'
+  | 'sports';
 
 export interface Product {
   id: string;

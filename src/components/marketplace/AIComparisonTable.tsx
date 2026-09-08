@@ -12,16 +12,15 @@ interface AIComparisonTableProps {
 
 // Key specs to show in the comparison table
 const COMPARISON_SPEC_KEYS: Record<string, string[]> = {
-  electronics: ['Display', 'Chip', 'Processor', 'RAM', 'Storage', 'Camera', 'Battery', 'DPI', 'Video'],
-  jewellery: ['Metal', 'Stone', 'Purity', 'Weight', 'Closure', 'Style', 'Occasion'],
-  fashion: ['Fit', 'Fabric', 'Upper', 'Sole', 'Frame', 'Lens', 'Movement', 'Strap'],
-  home_appliances: ['Capacity', 'Star Rating', 'Type', 'Power', 'Technology', 'Runtime'],
-  beauty: ['Volume', 'Key Ingredient', 'Finish', 'Coverage', 'Skin Type'],
-  furniture: ['Material', 'Size', 'Seating', 'Dimensions', 'Storage', 'Shelves'],
-  sports: ['Use', 'Cushioning', 'Frame', 'Weight', 'Thickness', 'Material'],
-  travel: ['Class', 'Validity', 'Duration', 'Baggage', 'Includes'],
-  books_stationery: ['Display', 'Storage', 'Pages', 'Ruling', 'Type', 'Body'],
-  grocery_gourmet: ['Weight', 'Contents', 'Pieces', 'Type', 'Roast', 'Shelf Life'],
+  electronics: ['Display', 'Chip', 'Processor', 'RAM', 'Storage', 'Camera', 'Battery', 'Screen', 'Sensor'],
+  jewellery: ['Metal', 'Stone', 'Purity', 'Weight', 'Closure', 'Style', 'Occasion', 'Hallmark'],
+  fashion: ['Upper', 'Sole', 'Type', 'Sizes', 'Display', 'Platform', 'Battery'],
+  home_appliances: ['Capacity', 'Star Rating', 'Type', 'Warranty', 'Runtime', 'Filtration'],
+  furniture: ['Material', 'Seating', 'Dimensions', 'Size', 'Storage', 'Shelves', 'Finish'],
+  travel: ['Class', 'Validity', 'Baggage', 'Duration', 'Includes', 'Destination', 'Lounge Access'],
+  books_stationery: ['Display', 'Storage', 'Battery', 'Water Resistance'],
+  health_fitness: ['Battery', 'Sensors', 'GPS'],
+  sports: ['Body', 'Type', 'Strings', 'Use', 'Cushioning', 'Weight'],
 };
 
 const DEFAULT_KEYS = ['Display', 'Processor', 'Camera', 'Battery'];

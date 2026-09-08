@@ -15,12 +15,11 @@ export const FilterSortBar: React.FC = () => {
     { id: 'jewellery', label: '💎 Jewellery' },
     { id: 'fashion', label: '👕 Fashion' },
     { id: 'home_appliances', label: '🏠 Home Appliances' },
-    { id: 'beauty', label: '💄 Beauty' },
     { id: 'furniture', label: '🛋️ Furniture' },
-    { id: 'sports', label: '⚽ Sports' },
     { id: 'travel', label: '✈️ Travel' },
     { id: 'books_stationery', label: '📚 Books & Stationery' },
-    { id: 'grocery_gourmet', label: '🛒 Grocery & Gourmet' },
+    { id: 'health_fitness', label: '🏃 Health & Fitness' },
+    { id: 'sports', label: '⚽ Sports' },
   ];
 
   const sortOptions: { id: FilterSortState['sortBy']; label: string }[] = [
