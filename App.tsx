@@ -1,12 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ShopScreen } from './src/screens/ShopScreen';
 import { ProductDetailScreen } from './src/screens/ProductDetailScreen';
 import { ComparisonModal } from './src/screens/ComparisonModal';
 import { Product } from './src/types/marketplace';
 import { useMarketplaceStore } from './src/store/marketplaceStore';
+
+// Global Web CSS fix to ensure React Native Web never collapses to 0 height or blank white screen
+if (Platform.OS === 'web' && typeof document !== 'undefined') {
+  const styleEl = document.createElement('style');
+  styleEl.textContent = `
+    html, body, #root {
+      height: 100% !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      background-color: #F8F9FE !important;
+      overflow-x: hidden !important;
+    }
+  `;
+  document.head.appendChild(styleEl);
+}
 
 export default function App() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -22,7 +40,7 @@ export default function App() {
       <View style={styles.container}>
         <StatusBar style="dark" />
 
-        <View style={styles.mobileFrame}>
+        <View style={styles.contentWrapper}>
           {selectedProduct ? (
             /* Product Detail Screen View */
             <ProductDetailScreen
@@ -54,15 +72,14 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#E2E8F0',
+    width: '100%',
+    backgroundColor: '#F8F9FE',
     alignItems: 'center',
-    justifyContent: 'center',
   },
-  mobileFrame: {
+  contentWrapper: {
     flex: 1,
     width: '100%',
-    maxWidth: 480,
+    maxWidth: Platform.OS === 'web' ? 500 : undefined,
     backgroundColor: '#F8F9FE',
-    overflow: 'hidden',
   },
 });
