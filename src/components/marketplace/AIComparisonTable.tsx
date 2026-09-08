@@ -12,14 +12,16 @@ interface AIComparisonTableProps {
 
 // Key specs to show in the comparison table
 const COMPARISON_SPEC_KEYS: Record<string, string[]> = {
-  smartphones: ['Display', 'Processor', 'RAM + Storage', 'Camera', 'Battery', 'OS'],
-  laptops: ['Display', 'Processor', 'Memory', 'RAM', 'Storage', 'Battery Life', 'Weight', 'Graphics'],
-  headphones: ['Battery Life', 'ANC', 'Connectivity', 'Weight', 'Driver Unit'],
-  appliances: ['Display', 'Capacity', 'Energy Rating', 'Cooling', 'Sound', 'Processor'],
-  jewellery: ['Gold Purity', 'Diamond Weight', 'Certification', 'Buyback'],
-  travel: ['Validity', 'Cabin Class', 'Duration', 'Hotel'],
-  wearables: ['Battery Life', 'Driver Unit', 'ANC', 'Weight'],
-  electronics: ['Display', 'Processor', 'Camera', 'Battery'],
+  electronics: ['Display', 'Chip', 'Processor', 'RAM', 'Storage', 'Camera', 'Battery', 'DPI', 'Video'],
+  jewellery: ['Metal', 'Stone', 'Purity', 'Weight', 'Closure', 'Style', 'Occasion'],
+  fashion: ['Fit', 'Fabric', 'Upper', 'Sole', 'Frame', 'Lens', 'Movement', 'Strap'],
+  home_appliances: ['Capacity', 'Star Rating', 'Type', 'Power', 'Technology', 'Runtime'],
+  beauty: ['Volume', 'Key Ingredient', 'Finish', 'Coverage', 'Skin Type'],
+  furniture: ['Material', 'Size', 'Seating', 'Dimensions', 'Storage', 'Shelves'],
+  sports: ['Use', 'Cushioning', 'Frame', 'Weight', 'Thickness', 'Material'],
+  travel: ['Class', 'Validity', 'Duration', 'Baggage', 'Includes'],
+  books_stationery: ['Display', 'Storage', 'Pages', 'Ruling', 'Type', 'Body'],
+  grocery_gourmet: ['Weight', 'Contents', 'Pieces', 'Type', 'Roast', 'Shelf Life'],
 };
 
 const DEFAULT_KEYS = ['Display', 'Processor', 'Camera', 'Battery'];

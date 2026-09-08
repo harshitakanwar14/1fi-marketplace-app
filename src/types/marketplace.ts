@@ -28,13 +28,25 @@ export interface ProductVariant {
   storage?: string;
 }
 
+export type ProductCategory =
+  | 'electronics'
+  | 'jewellery'
+  | 'fashion'
+  | 'home_appliances'
+  | 'beauty'
+  | 'furniture'
+  | 'sports'
+  | 'travel'
+  | 'books_stationery'
+  | 'grocery_gourmet';
+
 export interface Product {
   id: string;
   name: string;
   brand: string;
   brandLogo: string;
-  category: 'electronics' | 'travel' | 'jewellery' | 'wearables' | 'laptops' | 'smartphones' | 'headphones' | 'appliances';
-  subcategory?: string; // e.g., "Samsung S Series", "Apple MacBook", "Over-Ear Headphones"
+  category: ProductCategory;
+  subcategory?: string;
   price: number;
   originalPrice?: number;
   discountPercentage?: number;
@@ -42,7 +54,7 @@ export interface Product {
   reviewCount: number;
   images: string[];
   thumbnail: string;
-  badge?: string; // e.g., "0% No-Cost EMI", "Best Seller", "1Fi Choice"
+  badge?: string;
   emiPlans: EMIPlan[];
   specs: Record<string, string>;
   description: string;
