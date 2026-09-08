@@ -1,58 +1,62 @@
 import { Platform } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const MEMORY_STORE: Record<string, string> = {};
 
 /**
- * Cross-platform safe storage utility
- * Uses window.localStorage on web, AsyncStorage on native platforms, and in-memory fallback.
+ * Cross-platform storage utility.
+ * - Web: uses window.localStorage
+ * - Native: uses @react-native-async-storage (only imported at runtime, never on web)
+ * - Fallback: in-memory map
  */
-class SafeStorage {
-  private memoryStore: Record<string, string> = {};
-
+export const safeStorage = {
   async getItem(key: string): Promise<string | null> {
-    try {
-      if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
+    if (Platform.OS === 'web') {
+      try {
         return window.localStorage.getItem(key);
+      } catch {
+        return MEMORY_STORE[key] ?? null;
       }
-      if (AsyncStorage) {
-        return await AsyncStorage.getItem(key);
-      }
-    } catch (e) {
-      // Fallback to memory
     }
-    return this.memoryStore[key] || null;
-  }
+    try {
+      // Dynamically import AsyncStorage only on native to avoid web crash
+      const { default: AsyncStorage } = await import('@react-native-async-storage/async-storage');
+      return AsyncStorage.getItem(key);
+    } catch {
+      return MEMORY_STORE[key] ?? null;
+    }
+  },
 
   async setItem(key: string, value: string): Promise<void> {
-    try {
-      if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
+    if (Platform.OS === 'web') {
+      try {
         window.localStorage.setItem(key, value);
-        return;
+      } catch {
+        MEMORY_STORE[key] = value;
       }
-      if (AsyncStorage) {
-        await AsyncStorage.setItem(key, value);
-        return;
-      }
-    } catch (e) {
-      // Fallback to memory
+      return;
     }
-    this.memoryStore[key] = value;
-  }
+    try {
+      const { default: AsyncStorage } = await import('@react-native-async-storage/async-storage');
+      await AsyncStorage.setItem(key, value);
+    } catch {
+      MEMORY_STORE[key] = value;
+    }
+  },
 
   async removeItem(key: string): Promise<void> {
-    try {
-      if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
+    if (Platform.OS === 'web') {
+      try {
         window.localStorage.removeItem(key);
-        return;
+      } catch {
+        delete MEMORY_STORE[key];
       }
-      if (AsyncStorage) {
-        await AsyncStorage.removeItem(key);
-        return;
-      }
-    } catch (e) {
-      // Fallback to memory
+      return;
     }
-    delete this.memoryStore[key];
-  }
-}
-
-export const safeStorage = new SafeStorage();
+    try {
+      const { default: AsyncStorage } = await import('@react-native-async-storage/async-storage');
+      await AsyncStorage.removeItem(key);
+    } catch {
+      delete MEMORY_STORE[key];
+    }
+  },
+};
